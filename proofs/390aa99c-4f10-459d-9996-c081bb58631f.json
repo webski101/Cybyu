@@ -1,0 +1,32 @@
+{
+  "id": "390aa99c-4f10-459d-9996-c081bb58631f",
+  "workloadId": "correct",
+  "workloadTitle": "Correct Calculator",
+  "programHash": "6d39cb6e53f61e9c1b0e070618fcf8efe0f03850b2ebea0b2265deb677b84fb1",
+  "inputHash": "325ab6b7973413687f393728051462b1901892de099e3c5bc2447527dca93603",
+  "outputHash": "cc57fcc173aeb1f8c7ce2b3b08d43bc47c06a4f452fa871fe41f69956502c9ed",
+  "testTotal": 3,
+  "testPassed": 3,
+  "testFailed": 0,
+  "testResult": "PASS",
+  "proofStatus": "VALID",
+  "proverBackend": "ZisK v1.2.0-alpha / WSL2",
+  "proofGeneratedAt": "2026-08-31T06:30:04.574625Z",
+  "proofGenerationMs": 1494282,
+  "latestVerifiedAt": "2026-08-31T13:59:38.793536Z",
+  "latestVerificationMs": 56,
+  "proofArtifactReference": "/home/chisomelvin/cybyu-mvp/correct/guest/correct-proof.bin",
+  "createdAt": "2026-08-31T13:59:31.150Z",
+  "verifications": [
+    {
+      "at": "2026-08-31T13:59:31.283712Z",
+      "ms": 48,
+      "ok": true
+    },
+    {
+      "at": "2026-08-31T13:59:38.793536Z",
+      "ms": 56,
+      "ok": true
+    }
+  ]
+}

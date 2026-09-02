@@ -1,0 +1,32 @@
+{
+  "id": "9925850d-f962-45a1-ab33-bc756e3a3125",
+  "workloadId": "buggy",
+  "workloadTitle": "Buggy Calculator",
+  "programHash": "9a338f74e252b4b5d6f0c5cd808bcd93bfc40f0ddd55449378fe0f19e4fe6704",
+  "inputHash": "cb39d379a12997ef495270c0efda7edd0f11d1cbc82b8d222989dbabfcb34d12",
+  "outputHash": "905c3e0e1bf85991fc02bb18a99f986ec86d99daf813aa29f256d3d6209a7465",
+  "testTotal": 3,
+  "testPassed": 0,
+  "testFailed": 3,
+  "testResult": "FAIL",
+  "proofStatus": "VALID",
+  "proverBackend": "ZisK v1.2.0-alpha / WSL2",
+  "proofGeneratedAt": "2026-08-31T07:34:56.009240Z",
+  "proofGenerationMs": 2219769,
+  "latestVerifiedAt": "2026-08-31T13:56:12.138875Z",
+  "latestVerificationMs": 87,
+  "proofArtifactReference": "/home/chisomelvin/cybyu-mvp/buggy/guest/buggy-proof.bin",
+  "createdAt": "2026-08-31T13:54:29.655Z",
+  "verifications": [
+    {
+      "at": "2026-08-31T13:54:29.679681Z",
+      "ms": 46,
+      "ok": true
+    },
+    {
+      "at": "2026-08-31T13:56:12.138875Z",
+      "ms": 87,
+      "ok": true
+    }
+  ]
+}

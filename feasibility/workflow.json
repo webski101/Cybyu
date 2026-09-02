@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/cysic-labs/venus",
+  "repositoryCloneStatus": "blocked-by-classifier",
+  "pinningStrategy": "deferred-until-clone-succeeds",
+  "officialBackend": "ZisK (https://github.com/0xPolygonHermez/zisk), wrapped by Venus monorepo",
+  "documentation": [
+    "https://github.com/cysic-labs/venus",
+    "https://0xpolygonhermez.github.io/zisk/getting_started/quickstart.html",
+    "https://0xpolygonhermez.github.io/zisk/getting_started/writing_programs.html"
+  ],
+  "runtime": "Linux x86_64 (Ubuntu 22.04+) or macOS 14+; Mac not supported by Venus",
+  "requirements": [
+    "Rust (version pinned by ziskup installer)",
+    "Ubuntu apt packages: xz-utils, jq, curl, build-essential, qemu-system, libomp-dev, libgmp-dev, nlohmann-json3-dev, protobuf-compiler, uuid-dev, libgrpc++-dev, libsecp256k1-dev, libsodium-dev, libpqxx-dev, nasm, libopenmpi-dev, openmpi-bin, openmpi-common, libclang-dev, clang, gcc-riscv64-unknown-elf",
+    "macOS brew packages: jq, curl, libomp, protobuf, openssl, nasm, pkgconf, open-mpi, libffi, nlohmann-json, libsodium",
+    "Hardware: GPU required by official ZisK proving (per writing_programs 'Prove' section); CUDA-class GPU expected"
+  ],
+  "commands": {
+    "install": "curl https://raw.githubusercontent.com/0xPolygonHermez/zisk/main/ziskup/install.sh | bash",
+    "newProject": "cargo-zisk new <project_name>",
+    "build": "cargo build --release",
+    "execute": "cargo-zisk run --release",
+    "programSetup": "cargo-zisk program-setup",
+    "prove": "cargo-zisk prove --release --minimal-memory --verify-proof -o proof.bin",
+    "verify": "cargo-zisk verify -p proof.bin",
+    "compressedProve": "cargo-zisk prove --release --minimal-memory --verify-proof -o proof.bin"
+  },
+  "expectedArtifacts": [
+    "./target/elf/riscv64ima-zisk-zkvm-elf/release/<project_name>",
+    "./tmp/proof.bin (final proof file)",
+    "Public outputs read during execute/prove; verification key in $HOME/.zisk"
+  ],
+  "verificationSignal": "Documentation does not document an explicit success/failure string; cargo-zisk verify must be run and its exit code plus stdout/stderr must be inspected to confirm validity."
+}

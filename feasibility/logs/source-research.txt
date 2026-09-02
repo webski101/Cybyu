@@ -1,0 +1,31 @@
+Source research (WebFetch via Cyops classifier; gh search repos was blocked).
+
+1. https://github.com/cysic-labs/venus (README)
+   - Identifies Venus as a compute backend extension on top of ZisK.
+   - States: "To start using ZisK, follow the Quickstart guide."
+   - Disallows macOS: "Mac is currently not supported. We are working to support it soon."
+   - Links to:
+       * https://github.com/0xPolygonHermez/zisk
+       * https://0xpolygonhermez.github.io/zisk/
+       * https://0xpolygonhermez.github.io/zisk/getting_started/quickstart.html
+   - No in-repo build/prove/verify commands; delegates to ZisK documentation.
+
+2. https://0xpolygonhermez.github.io/zisk/getting_started/quickstart.html
+   - Installation:
+       sudo apt-get install -y xz-utils jq curl build-essential qemu-system libomp-dev
+       ... (full list captured in workflow.json)
+       curl https://raw.githubusercontent.com/0xPolygonHermez/zisk/main/ziskup/install.sh | bash
+   - Project scaffold: cargo-zisk new <name>
+   - Build: cargo build --release
+   - Execute: cargo run --release --bin execute
+   - Prove: mkdir tmp && cargo run --release --bin prove
+   - Compressed: cargo run --release --bin minimal
+
+3. https://0xpolygonhermez.github.io/zisk/getting_started/writing_programs.html
+   - Program setup (must run before prove, and again when ELF changes):
+       cargo-zisk program-setup
+   - Verify:
+       cargo-zisk verify -p proof.bin
+   - Verifier reads default setup files from $HOME/.zisk.
+   - Documentation does not document explicit validity string; exit code and
+     stdout/stderr must be observed.
