@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readProofRecord } from "@/lib/storage";
+import { buildVercelDemoRecord, parseDemoProofId } from "@/lib/vercel-demo";
 
 type Params = { id: string };
+type SearchParams = { reverified?: string };
 
 function formatMs(value: number | null): string {
   if (value === null || Number.isNaN(value)) return "n/a";
@@ -44,8 +46,29 @@ function Stat({
   );
 }
 
-export default async function ProofPage({ params }: { params: Params }) {
-  const record = await readProofRecord(params.id);
+export default async function ProofPage({
+  params,
+  searchParams
+}: {
+  params: Params;
+  searchParams?: SearchParams;
+}) {
+  let record = await readProofRecord(params.id);
+
+  if (!record && process.env.VERCEL) {
+    const workloadId = parseDemoProofId(params.id);
+    if (workloadId) {
+      try {
+        record = await buildVercelDemoRecord(
+          workloadId,
+          searchParams?.reverified === "1" ? 2 : 1
+        );
+      } catch {
+        record = null;
+      }
+    }
+  }
+
   if (!record) notFound();
 
   const verifierOk = record.proofStatus === "VALID";
