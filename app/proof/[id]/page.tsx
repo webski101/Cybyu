@@ -72,6 +72,9 @@ export default async function ProofPage({
   if (!record) notFound();
 
   const verifierOk = record.proofStatus === "VALID";
+  const artifactName = record.proofArtifactReference
+    ? record.proofArtifactReference.split(/[\\/]/).pop() ?? null
+    : null;
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-6 py-16">
@@ -98,19 +101,34 @@ export default async function ProofPage({
         </p>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Program Hash</p>
-          <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.programHash}</p>
+      <section className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+          Execution Evidence
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-ink-700 bg-ink-900/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-slate-400">ZisK Program Hash</p>
+            <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.programHash}</p>
+          </div>
+          <div className="rounded-xl border border-ink-700 bg-ink-900/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-slate-400">Input Hash</p>
+            <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.inputHash}</p>
+          </div>
+          <div className="rounded-xl border border-ink-700 bg-ink-900/60 p-4">
+            <p className="text-xs uppercase tracking-wider text-slate-400">Output Hash</p>
+            <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.outputHash}</p>
+          </div>
         </div>
-        <div className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Test / Input Hash</p>
-          <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.inputHash}</p>
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <Stat label="Proof Artifact" value={artifactName ?? "n/a"} />
+          <Stat label="Verifications" value={String(record.verifications.length)} />
+          <Stat label="Latest Verified" value={formatTimestamp(record.latestVerifiedAt)} />
+          <Stat label="Backend" value={record.proverBackend} />
         </div>
-        <div className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Output Hash</p>
-          <p className="mt-2 break-all font-mono text-xs text-accent-500">{record.outputHash}</p>
-        </div>
+        <p className="mt-4 text-xs leading-relaxed text-slate-500">
+          Cybyu proves what executed and what result was produced. A valid
+          execution proof does not mean the program itself is correct.
+        </p>
       </section>
 
       <section className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -150,11 +168,6 @@ export default async function ProofPage({
       </section>
 
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Stat label="Proving Backend" value={record.proverBackend} />
-        <Stat
-          label="Proof Artifact"
-          value={record.proofArtifactReference ?? "n/a"}
-        />
         <Stat
           label="Proof Generation Time"
           value={formatMs(record.proofGenerationMs)}
@@ -167,15 +180,7 @@ export default async function ProofPage({
           label="Proof Generated"
           value={formatTimestamp(record.proofGeneratedAt)}
         />
-        <Stat
-          label="Latest Verified"
-          value={formatTimestamp(record.latestVerifiedAt)}
-        />
         <Stat label="Created" value={formatTimestamp(record.createdAt)} />
-        <Stat
-          label="Verifications"
-          value={String(record.verifications.length)}
-        />
       </section>
 
       <section className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
