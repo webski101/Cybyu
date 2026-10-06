@@ -4,7 +4,7 @@ import { readProofRecord } from "@/lib/storage";
 import { buildVercelDemoRecord, parseDemoProofId } from "@/lib/vercel-demo";
 
 type Params = { id: string };
-type SearchParams = { reverified?: string };
+type SearchParams = { reverified?: string; result?: string };
 
 function formatMs(value: number | null): string {
   if (value === null || Number.isNaN(value)) return "n/a";
@@ -46,6 +46,37 @@ function Stat({
   );
 }
 
+function ReverifyFailed() {
+  return (
+    <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-6 py-16">
+      <header className="flex flex-col gap-2">
+        <Link
+          href="/prove"
+          className="font-mono text-xs uppercase tracking-[0.2em] text-accent-500 hover:text-accent-600"
+        >
+          &larr; Run Verified
+        </Link>
+        <h1 className="text-3xl font-semibold">Cybyu Execution Proof</h1>
+      </header>
+      <section className="rounded-xl border border-bad/40 bg-bad/5 p-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wider text-bad">
+          Re-verification job failed
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-300">
+          The verifier did not return a valid result for this proof, so no
+          result is shown. Cybyu never displays proof data it could not verify.
+        </p>
+      </section>
+      <Link
+        href="/prove"
+        className="self-start rounded-xl bg-accent-600 px-5 py-2.5 text-sm font-semibold text-ink-900 transition hover:bg-accent-500"
+      >
+        Back to workloads
+      </Link>
+    </main>
+  );
+}
+
 export default async function ProofPage({
   params,
   searchParams
@@ -69,7 +100,14 @@ export default async function ProofPage({
     }
   }
 
-  if (!record) notFound();
+  const jobResult = searchParams?.result;
+
+  if (!record) {
+    if (jobResult === "failed") {
+      return <ReverifyFailed />;
+    }
+    notFound();
+  }
 
   const verifierOk = record.proofStatus === "VALID";
   const artifactName = record.proofArtifactReference
@@ -90,6 +128,42 @@ export default async function ProofPage({
           Proof id <span className="font-mono">{record.id}</span>
         </p>
       </header>
+
+      {jobResult === "verified" && (
+        <section className="rounded-xl border border-good/40 bg-good/5 px-4 py-3">
+          <p className="text-sm font-semibold text-good">
+            Re-verification job completed: the stored authentic proof verified
+            again.
+          </p>
+        </section>
+      )}
+
+      {jobResult === "failed" && !verifierOk && (
+        <section className="rounded-xl border border-bad/40 bg-bad/5 px-4 py-3">
+          <p className="text-sm font-semibold text-bad">
+            Re-verification job failed: the verifier did not validate this
+            proof.
+          </p>
+        </section>
+      )}
+
+      <section className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
+          Re-verify Proof
+        </h2>
+        <p className="mb-3 text-sm text-slate-400">
+          Runs the real ZisK verifier against the stored authentic proof
+          artifact for this record. It never executes the workload again.
+        </p>
+        <form action={`/api/proofs/${record.id}/reverify`} method="post">
+          <button
+            type="submit"
+            className="rounded-xl bg-accent-600 px-5 py-2.5 text-sm font-semibold text-ink-900 transition hover:bg-accent-500"
+          >
+            Re-verify Proof
+          </button>
+        </form>
+      </section>
 
       <section className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
@@ -181,25 +255,6 @@ export default async function ProofPage({
           value={formatTimestamp(record.proofGeneratedAt)}
         />
         <Stat label="Created" value={formatTimestamp(record.createdAt)} />
-      </section>
-
-      <section className="rounded-2xl border border-ink-700 bg-ink-800 p-5">
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-slate-400">
-          Re-verify
-        </h2>
-        <p className="mb-3 text-sm text-slate-400">
-          Re-verify invokes the real ZisK verifier against the stored authentic
-          proof artifact for this record. It never executes the workload
-          again.
-        </p>
-        <form action={`/api/proofs/${record.id}/reverify`} method="post">
-          <button
-            type="submit"
-            className="rounded-xl bg-accent-600 px-5 py-2.5 text-sm font-semibold text-ink-900 transition hover:bg-accent-500"
-          >
-            Re-verify Proof
-          </button>
-        </form>
       </section>
 
       <section className="rounded-2xl border border-amber-400/30 bg-amber-400/5 p-5 text-amber-200">

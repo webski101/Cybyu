@@ -17,13 +17,13 @@ export async function POST(
     try {
       await verifyBundledProof(workloadId);
       return NextResponse.redirect(
-        new URL(`/proof/${params.id}?reverified=1`, request.url),
+        new URL(`/proof/${params.id}?reverified=1&result=verified`, request.url),
         { status: 303 }
       );
-    } catch (error) {
-      return NextResponse.json(
-        { error: (error as Error).message },
-        { status: 500 }
+    } catch {
+      return NextResponse.redirect(
+        new URL(`/proof/${params.id}?result=failed`, request.url),
+        { status: 303 }
       );
     }
   }
@@ -32,9 +32,13 @@ export async function POST(
   if (!result.ok && !result.record) {
     return NextResponse.json({ error: result.reason ?? "failed" }, { status: 404 });
   }
-  return NextResponse.redirect(new URL(`/proof/${params.id}`, request.url), {
-    status: 303
-  });
+  return NextResponse.redirect(
+    new URL(
+      `/proof/${params.id}?result=${result.ok ? "verified" : "failed"}`,
+      request.url
+    ),
+    { status: 303 }
+  );
 }
 
 export const GET = POST;
