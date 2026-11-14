@@ -226,7 +226,10 @@ function headlineFor(verdict: Verdict, offerType: OfferType): string {
   return `Go (with checks): no major scam markers found`;
 }
 
-export function analyzeOffer(rawText: string): AnalysisResult {
+export function analyzeOffer(
+  rawText: string,
+  countryHint?: string | null,
+): AnalysisResult {
   const text = rawText.trim().replace(/\s+/g, " ");
   if (text.length < 12) {
     throw new Error("Paste a longer offer message (at least a few sentences).");
@@ -253,8 +256,14 @@ export function analyzeOffer(rawText: string): AnalysisResult {
   const score = Math.max(0, Math.min(100, risk));
   const verdict = scoreToVerdict(score);
   const offerType = detectOfferType(text);
-  const country = detectCountry(text);
-  const docs = retrieveCitations(text, 3);
+  const hint = countryHint?.trim().toUpperCase() || null;
+  const country =
+    hint && hint !== "GLOBAL" ? hint : detectCountry(text);
+  const citationSeed =
+    country && country !== "GLOBAL"
+      ? `${text}\n country:${country}`
+      : text;
+  const docs = retrieveCitations(citationSeed, 3);
 
   const summary =
     verdict === "no_go"
@@ -290,8 +299,9 @@ export function analyzeOffer(rawText: string): AnalysisResult {
 
 export async function analyzeOfferWithOptionalLlm(
   rawText: string,
+  countryHint?: string | null,
 ): Promise<AnalysisResult> {
-  const base = analyzeOffer(rawText);
+  const base = analyzeOffer(rawText, countryHint);
   const key = process.env.OPENAI_API_KEY?.trim();
   if (!key) return base;
 

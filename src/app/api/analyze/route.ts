@@ -21,12 +21,10 @@ export async function POST(req: Request) {
       );
     }
 
-    let text = parsed.data.text;
-    if (parsed.data.countryHint && !text.toLowerCase().includes(parsed.data.countryHint.toLowerCase())) {
-      text = `${text}\n\n[context: country hint ${parsed.data.countryHint}]`;
-    }
-
-    const result = await analyzeOfferWithOptionalLlm(text);
+    const result = await analyzeOfferWithOptionalLlm(
+      parsed.data.text,
+      parsed.data.countryHint,
+    );
     await saveResult(result);
 
     return NextResponse.json({ result });

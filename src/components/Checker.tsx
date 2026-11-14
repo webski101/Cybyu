@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import type { AnalysisResult } from "@/lib/types";
 import { ResultBrief } from "./ResultBrief";
 
@@ -24,34 +24,38 @@ export function Checker() {
   const [country, setCountry] = useState("NG");
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [pending, setPending] = useState(false);
 
-  function runAnalyze(value: string) {
+  async function runAnalyze(value: string) {
+    const trimmed = value.trim();
+    if (trimmed.length < 12 || pending) return;
+
     setError(null);
-    startTransition(async () => {
-      try {
-        const res = await fetch("/api/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: value, countryHint: country }),
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          setError(data.error || "Could not analyze that offer.");
-          setResult(null);
-          return;
-        }
-        setResult(data.result as AnalysisResult);
-        requestAnimationFrame(() => {
-          document.getElementById("brief")?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        });
-      } catch {
-        setError("Network error — is the tryui server running?");
+    setPending(true);
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: trimmed, countryHint: country }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Could not analyze that offer.");
+        setResult(null);
+        return;
       }
-    });
+      setResult(data.result as AnalysisResult);
+      requestAnimationFrame(() => {
+        document.getElementById("brief")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    } catch {
+      setError("Network error — is the tryui server running?");
+    } finally {
+      setPending(false);
+    }
   }
 
   return (
@@ -87,21 +91,30 @@ export function Checker() {
             <button
               type="button"
               className="chip"
-              onClick={() => setText(SAMPLES.scam)}
+              onClick={() => {
+                setText(SAMPLES.scam);
+                setError(null);
+              }}
             >
               Sample scam
             </button>
             <button
               type="button"
               className="chip"
-              onClick={() => setText(SAMPLES.caution)}
+              onClick={() => {
+                setText(SAMPLES.caution);
+                setError(null);
+              }}
             >
               Sample caution
             </button>
             <button
               type="button"
               className="chip"
-              onClick={() => setText(SAMPLES.clean)}
+              onClick={() => {
+                setText(SAMPLES.clean);
+                setError(null);
+              }}
             >
               Sample clean
             </button>
@@ -112,7 +125,7 @@ export function Checker() {
           type="button"
           className="btn-primary"
           disabled={pending || text.trim().length < 12}
-          onClick={() => runAnalyze(text)}
+          onClick={() => void runAnalyze(text)}
         >
           {pending ? "Reading the offer…" : "Get go / no-go brief"}
         </button>
@@ -123,11 +136,7 @@ export function Checker() {
       {result ? (
         <ResultBrief
           result={result}
-          shareUrl={
-            typeof window !== "undefined"
-              ? `${window.location.origin}/r/${result.id}`
-              : `/r/${result.id}`
-          }
+          shareUrl={`${typeof window !== "undefined" ? window.location.origin : ""}/r/${result.id}`}
         />
       ) : null}
     </div>

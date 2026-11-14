@@ -72,19 +72,19 @@ a {
 }
 
 .hero {
-  padding: 4.5rem 0 2.5rem;
-  min-height: min(88vh, 820px);
+  padding: 3rem 0 2rem;
+  min-height: min(78vh, 720px);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 1rem;
   animation: rise 700ms ease both;
 }
 
 .brand-hero {
   font-family: var(--font-display);
-  font-size: clamp(4.2rem, 14vw, 8.5rem);
-  line-height: 0.9;
+  font-size: clamp(4.8rem, 16vw, 9rem);
+  line-height: 0.88;
   letter-spacing: -0.07em;
   margin: 0;
   color: var(--ink);
