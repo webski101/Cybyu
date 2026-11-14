@@ -1,0 +1,18 @@
+services:
+  tryui:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - TRYUI_HOST=vultr
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      # Optional: set DATABASE_URL to a Postgres instance on Vultr.
+      # Without it, tryui uses embedded PGlite on the container filesystem.
+      - DATABASE_URL=${DATABASE_URL:-}
+    volumes:
+      - tryui-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  tryui-data:
