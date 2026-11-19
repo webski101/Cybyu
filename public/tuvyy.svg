@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#0b1220"/>
+  <rect width="720" height="900" fill="#121a2b"/>
+  <rect x="880" width="720" height="900" fill="#163028"/>
+  <rect x="720" y="380" width="160" height="140" fill="#b6f24d"/>
+  <rect width="8" height="900" fill="#b6f24d"/>
+  <rect x="1592" width="8" height="900" fill="#ff6b4a"/>
+  <text x="80" y="360" font-family="Syne, Arial Black, sans-serif" font-size="120" font-weight="800" fill="#eef2f8">Tuvyy</text>
+  <text x="80" y="430" font-family="Manrope, Arial, sans-serif" font-size="36" fill="#9aa8c3">Cross-VM Hybrid DAO</text>
+  <text x="755" y="460" font-family="IBM Plex Mono, monospace" font-size="22" font-weight="700" fill="#0b1220">ATOMIC</text>
+  <text x="940" y="400" font-family="Manrope, Arial, sans-serif" font-size="32" fill="#9aa8c3">EVM vote</text>
+  <text x="940" y="460" font-family="Manrope, Arial, sans-serif" font-size="32" fill="#b6f24d">Native settle</text>
+  <text x="940" y="520" font-family="Manrope, Arial, sans-serif" font-size="32" fill="#ff6b4a">ML-DSA execute</text>
+</svg>

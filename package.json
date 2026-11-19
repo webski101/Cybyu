@@ -1,0 +1,33 @@
+{
+  "name": "tuvyy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Tuvyy — Cross-VM Hybrid DAO on QoreChain (Build Before Q-Day).",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "forge test -vv && node scripts/smoke.mjs",
+    "test:forge": "forge test -vv",
+    "test:smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@qorechain/evm": "^0.14.0",
+    "@qorechain/sdk": "^0.14.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "viem": "^2.58.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "esbuild": "0.21.5",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.0"
+  }
+}
